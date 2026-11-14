@@ -1,6 +1,7 @@
 package com.example.diarioespacial.data.remote
 
 import com.example.diarioespacial.data.remote.dto.ApodDto
+import com.example.diarioespacial.data.remote.dto.NeoFeedDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,4 +18,12 @@ interface NasaApi {
         @Query("start_date") fechaInicio: String,
         @Query("end_date") fechaFin: String
     ): List<ApodDto>
+
+    /** NeoWs Feed: asteroides que pasan cerca de la Tierra (rango máximo de 7 días). */
+    @GET("neo/rest/v1/feed")
+    suspend fun obtenerAsteroides(
+        @Query("api_key") apiKey: String,
+        @Query("start_date") fechaInicio: String,
+        @Query("end_date") fechaFin: String
+    ): NeoFeedDto
 }

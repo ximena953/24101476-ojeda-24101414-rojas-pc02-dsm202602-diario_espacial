@@ -66,3 +66,41 @@ la aplicación no se cierra: muestra el mensaje "Falta la clave NASA_API_KEY en 
 - Pantallas: lista (de la más reciente a la más antigua), detalle (`hdurl` o `url`, título, fecha,
   autor y explicación) y "Mis imágenes favoritas".
 - Si `media_type` es `video`, no se carga imagen: se muestra "Contenido en video".
+
+## Opción Asteroides (Alumno 2)
+
+- Endpoint: `GET neo/rest/v1/feed` con `start_date` y `end_date` (últimos 7 días).
+- Tabla Room `asteroides` (`AsteroideEntity`, `AsteroideDao`). El id es la clave primaria.
+- `NeoFeedDto.aEntities()` aplana el mapa `{fecha: [asteroides]}` en una sola lista y convierte
+  a número la velocidad y la distancia, que llegan como texto (`toDoubleOrNull()`).
+- `AsteroideRepository` guarda la respuesta en Room conservando los favoritos.
+- `AsteroidesViewModel` expone `AsteroidesUiState` con `StateFlow` y aplica el filtro
+  "Solo potencialmente peligrosos".
+- Pantallas: lista (fecha de aproximación más reciente primero), detalle y "Mis asteroides".
+- Los asteroides potencialmente peligrosos se muestran en rojo con la etiqueta
+  "Potencialmente peligroso". Los números se muestran con un máximo de dos decimales y su unidad.
+
+## Arquitectura
+
+```
+API NASA ──Retrofit──> DTO ──aEntity()──> Room (SQLite) ──Flow──> Repository ──StateFlow──> ViewModel ──> Pantalla
+```
+
+```
+app/src/main/java/com/example/diarioespacial/
+├── MainActivity.kt
+├── navigation/          NavegacionPrincipal (barra inferior) y Rutas
+├── data/remote/         RetrofitClient, NasaApi y DTO
+├── data/local/          AppDatabase, Entities y DAO
+├── data/repository/     ApodRepository y AsteroideRepository
+├── ui/componentes/      Indicador de carga, mensaje sin datos y botón de favorito
+├── ui/imagenes/         Opción Imágenes (Alumno 1)
+├── ui/asteroides/       Opción Asteroides (Alumno 2)
+├── ui/theme/            Tema Material 3
+└── util/                Fechas y mensajes de error
+```
+
+## Tecnologías
+
+Kotlin, Jetpack Compose (Material 3), Navigation Compose, Retrofit + Gson, Room + KSP, Coil,
+ViewModel con StateFlow.

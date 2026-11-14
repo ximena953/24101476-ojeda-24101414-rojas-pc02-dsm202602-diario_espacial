@@ -10,13 +10,15 @@ import androidx.room.RoomDatabase
  * Cada integrante agrega aquí su Entity y su DAO.
  */
 @Database(
-    entities = [ApodEntity::class],
-    version = 1,
+    entities = [ApodEntity::class, AsteroideEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun apodDao(): ApodDao
+
+    abstract fun asteroideDao(): AsteroideDao
 
     companion object {
         @Volatile
