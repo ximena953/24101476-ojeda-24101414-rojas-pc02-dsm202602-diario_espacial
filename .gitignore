@@ -1,0 +1,12 @@
+*.iml
+.gradle
+.kotlin
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+.DS_Store
+/.idea/
+# La clave de la API de la NASA vive aquí: nunca se sube al repositorio.
+local.properties
