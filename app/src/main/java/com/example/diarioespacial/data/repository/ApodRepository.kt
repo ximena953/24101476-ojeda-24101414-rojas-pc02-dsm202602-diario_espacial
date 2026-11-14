@@ -1,11 +1,9 @@
 package com.example.diarioespacial.data.repository
 
-import com.example.diarioespacial.BuildConfig
 import com.example.diarioespacial.data.local.ApodDao
 import com.example.diarioespacial.data.local.ApodEntity
 import com.example.diarioespacial.data.remote.NasaApi
 import com.example.diarioespacial.data.remote.dto.aEntity
-import com.example.diarioespacial.util.ClaveApiFaltanteException
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,15 +20,16 @@ class ApodRepository(
 
     fun observarImagen(fecha: String): Flow<ApodEntity?> = dao.observarPorFecha(fecha)
 
-    /** Consulta la API y guarda el resultado en Room, conservando las favoritas. */
+    /**
+     * Consulta las últimas imágenes de APOD y guarda en Room las del rango pedido
+     * (los últimos 7 días), conservando las favoritas.
+     */
     suspend fun actualizar(fechaInicio: String, fechaFin: String) {
-        val clave = BuildConfig.NASA_API_KEY
-        if (clave.isBlank()) throw ClaveApiFaltanteException()
-
-        val respuesta = api.obtenerImagenes(clave, fechaInicio, fechaFin)
+        val respuesta = api.obtenerImagenes(cantidad = 7)
         val favoritas = dao.fechasFavoritas().toSet()
         val imagenes = respuesta
             .mapNotNull { dto -> dto.aEntity() }
+            .filter { imagen -> imagen.fecha in fechaInicio..fechaFin }
             .map { imagen -> imagen.copy(esFavorita = imagen.fecha in favoritas) }
         dao.guardarTodas(imagenes)
     }
