@@ -58,7 +58,14 @@ la aplicación no se cierra: muestra el mensaje "Falta la clave NASA_API_KEY en 
 
 ## Opción Imágenes (Alumno 1)
 
-- Endpoint: `GET planetary/apod` con `start_date` y `end_date` (últimos 7 días, desde hace 6 días hasta hoy).
+- Endpoint: `GET https://science.nasa.gov/wp-json/wp/v2/apod-basic?per_page=7`, y se guardan
+  las imágenes de los últimos 7 días (desde hace 6 días hasta hoy).
+- **Por qué no se usa `api.nasa.gov/planetary/apod`:** en 2026 la NASA trasladó APOD a
+  `science.nasa.gov`, y el endpoint antiguo empezó a devolver el logo de la NASA con el título
+  "NASA Science" para todas las fechas. El servicio nuevo devuelve la imagen real de cada día y no
+  necesita clave (la clave de `local.properties` se sigue usando para NeoWs). En este servicio
+  `hdurl` es la imagen y `url` es la página del artículo; la explicación llega en HTML y se convierte
+  a texto.
 - Tabla Room `imagenes_apod` (`ApodEntity`, `ApodDao`). La fecha es la clave primaria.
 - `ApodDto.aEntity()` convierte la respuesta de la API en la Entity; descarta elementos sin fecha.
 - `ApodRepository` guarda la respuesta en Room conservando las favoritas; la pantalla lee de Room.
