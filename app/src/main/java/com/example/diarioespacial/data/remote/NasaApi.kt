@@ -11,12 +11,16 @@ import retrofit2.http.Query
  */
 interface NasaApi {
 
-    /** APOD: una imagen astronómica por día entre las dos fechas (AAAA-MM-DD). */
-    @GET("planetary/apod")
+    /**
+     * APOD (Astronomy Picture of the Day): las últimas imágenes publicadas.
+     * La NASA trasladó APOD a science.nasa.gov; el endpoint antiguo planetary/apod
+     * ahora devuelve el logo de la NASA para todas las fechas. Retrofit acepta una URL
+     * completa en @GET, así que esta llamada usa ese servicio sin cambiar la URL base.
+     * No necesita clave de API.
+     */
+    @GET("https://science.nasa.gov/wp-json/wp/v2/apod-basic")
     suspend fun obtenerImagenes(
-        @Query("api_key") apiKey: String,
-        @Query("start_date") fechaInicio: String,
-        @Query("end_date") fechaFin: String
+        @Query("per_page") cantidad: Int
     ): List<ApodDto>
 
     /** NeoWs Feed: asteroides que pasan cerca de la Tierra (rango máximo de 7 días). */
