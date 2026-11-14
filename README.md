@@ -55,3 +55,14 @@ la aplicación no se cierra: muestra el mensaje "Falta la clave NASA_API_KEY en 
 - Cada rama se entrega con un Pull Request hacia `main`, que revisa y aprueba el otro integrante
   dejando al menos un comentario de revisión.
 - Los Pull Requests se fusionan con **Create a merge commit** para conservar los commits pequeños.
+
+## Opción Imágenes (Alumno 1)
+
+- Endpoint: `GET planetary/apod` con `start_date` y `end_date` (últimos 7 días, desde hace 6 días hasta hoy).
+- Tabla Room `imagenes_apod` (`ApodEntity`, `ApodDao`). La fecha es la clave primaria.
+- `ApodDto.aEntity()` convierte la respuesta de la API en la Entity; descarta elementos sin fecha.
+- `ApodRepository` guarda la respuesta en Room conservando las favoritas; la pantalla lee de Room.
+- `ImagenesViewModel` expone `ImagenesUiState` con `StateFlow` (lista, cargando y error).
+- Pantallas: lista (de la más reciente a la más antigua), detalle (`hdurl` o `url`, título, fecha,
+  autor y explicación) y "Mis imágenes favoritas".
+- Si `media_type` es `video`, no se carga imagen: se muestra "Contenido en video".
