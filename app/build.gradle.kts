@@ -1,8 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+
+// La clave de la NASA se lee de local.properties, que no se sube al repositorio.
+val propiedadesLocales = Properties().apply {
+    val archivo = rootProject.file("local.properties")
+    if (archivo.exists()) {
+        archivo.inputStream().use { load(it) }
+    }
+}
+val nasaApiKey: String = propiedadesLocales.getProperty("NASA_API_KEY", "")
 
 android {
     namespace = "com.example.diarioespacial"
@@ -16,6 +27,9 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
+
+        // Queda disponible en el código como BuildConfig.NASA_API_KEY
+        buildConfigField("String", "NASA_API_KEY", "\"$nasaApiKey\"")
     }
 
     buildTypes {
@@ -31,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
