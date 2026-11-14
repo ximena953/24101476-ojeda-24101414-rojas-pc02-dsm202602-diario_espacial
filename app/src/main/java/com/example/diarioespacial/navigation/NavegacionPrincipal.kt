@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.diarioespacial.ui.imagenes.imagenesGraph
 
 /** Una opción de la barra de navegación inferior. */
 private data class OpcionBarra(val ruta: String, val titulo: String, val icono: ImageVector)
@@ -72,7 +73,7 @@ fun NavegacionPrincipal() {
             startDestination = Rutas.IMAGENES,
             modifier = Modifier.padding(margenes)
         ) {
-            composable(Rutas.IMAGENES) { Marcador(texto = "Imágenes: en desarrollo") }
+            imagenesGraph(navController)
             composable(Rutas.ASTEROIDES) { Marcador(texto = "Asteroides: en desarrollo") }
         }
     }
